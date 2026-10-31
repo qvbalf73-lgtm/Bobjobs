@@ -61,4 +61,20 @@ class AppSmokeTest {
         rule.onAllNodesWithText("收入虚拟收藏柜").onFirst().performSemanticsAction(SemanticsActions.OnClick)
         waitForText("已收入虚拟收藏柜")
     }
+
+    /** 对照测试：用模拟手指触摸点击首页签到按钮 */
+    @Test
+    fun touchCheckInButton() {
+        waitForText("每日收藏任务")
+        rule.onAllNodesWithText("签到").onFirst().performClick()
+        waitForText("已签到")
+    }
+
+    /** 对照测试：用模拟手指触摸点击底部导航 */
+    @Test
+    fun touchBottomTab() {
+        waitForText("每日收藏任务")
+        rule.onNodeWithTag("tab_trade").performClick()
+        waitForText("交换中心")
+    }
 }
