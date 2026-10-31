@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -343,6 +344,7 @@ private fun NormalTab(t: TabItem, selected: Boolean, modifier: Modifier, onClick
     val scheme = MaterialTheme.colorScheme
     Column(
         modifier
+            .testTag("tab_${t.route}")
             .clip(RoundedCornerShape(16.dp))
             .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onClick)
             .padding(vertical = 4.dp),
@@ -370,7 +372,7 @@ private fun CenterTab(t: TabItem, selected: Boolean, onClick: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val scale by animateFloatAsState(if (selected) 1.08f else 1f, label = "centerScale")
     Column(
-        Modifier.width(76.dp).clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onClick),
+        Modifier.width(76.dp).testTag("tab_${t.route}").clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
