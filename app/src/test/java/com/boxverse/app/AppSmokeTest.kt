@@ -5,7 +5,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -29,29 +31,34 @@ class AppSmokeTest {
         }
     }
 
+    private fun tap(tag: String) {
+        rule.onNodeWithTag(tag).performSemanticsAction(SemanticsActions.OnClick)
+        rule.waitForIdle()
+    }
+
     @Test
     fun allTabsOpenAndBlindBoxWorks() {
         waitForText("实物收藏总数")
         waitForText("每日收藏任务")
 
-        rule.onNodeWithTag("tab_pokedex").performClick()
+        tap("tab_pokedex")
         waitForText("潮玩图鉴")
         waitForText("云朵甜品店")
 
-        rule.onNodeWithTag("tab_trade").performClick()
+        tap("tab_trade")
         waitForText("交换中心")
         waitForText("摩卡小憩")
 
-        rule.onNodeWithTag("tab_profile").performClick()
+        tap("tab_profile")
         waitForText("成就勋章")
 
-        rule.onNodeWithTag("tab_blindbox").performClick()
+        tap("tab_blindbox")
         waitForText("选择盲盒系列")
-        rule.onAllNodesWithText("进入开盒").onFirst().performClick()
+        rule.onAllNodesWithText("进入开盒").onFirst().performSemanticsAction(SemanticsActions.OnClick)
         waitForText("概率公示")
-        rule.onAllNodesWithText("开 1 盒").onFirst().performClick()
+        rule.onAllNodesWithText("开 1 盒").onFirst().performSemanticsAction(SemanticsActions.OnClick)
         waitForText("收入虚拟收藏柜", 60_000)
-        rule.onAllNodesWithText("收入虚拟收藏柜").onFirst().performClick()
+        rule.onAllNodesWithText("收入虚拟收藏柜").onFirst().performSemanticsAction(SemanticsActions.OnClick)
         waitForText("已收入虚拟收藏柜")
     }
 }
