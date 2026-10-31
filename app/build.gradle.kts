@@ -57,7 +57,18 @@ android {
     }
 }
 
+// Robolectric 运行所需的安卓系统镜像：交给 Gradle 下载并缓存，测试时离线使用，避免运行时被仓库限流
+val robolectricRuntime: Configuration by configurations.creating
+val robolectricJarsDir = layout.buildDirectory.dir("robolectric-jars")
+val copyRobolectricJars by tasks.registering(Copy::class) {
+    from(robolectricRuntime)
+    into(robolectricJarsDir)
+}
+
 tasks.withType<Test>().configureEach {
+    dependsOn(copyRobolectricJars)
+    systemProperty("robolectric.offline", "true")
+    systemProperty("robolectric.dependency.dir", robolectricJarsDir.get().asFile.absolutePath)
     testLogging {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -97,6 +108,7 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
+    robolectricRuntime("org.robolectric:android-all-instrumented:14-robolectric-10818077-i7")
     testImplementation("androidx.test:core-ktx:1.6.1")
     testImplementation("androidx.test.ext:junit-ktx:1.2.1")
     testImplementation(composeBom)
