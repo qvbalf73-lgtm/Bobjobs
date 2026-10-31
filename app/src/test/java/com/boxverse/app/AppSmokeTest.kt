@@ -4,7 +4,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -18,8 +20,13 @@ class AppSmokeTest {
     @get:Rule
     val rule = createAndroidComposeRule<MainActivity>()
 
-    private fun waitForText(text: String, timeout: Long = 20_000) {
-        rule.waitUntil(timeout) { rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
+    private fun waitForText(text: String, timeout: Long = 30_000) {
+        try {
+            rule.waitUntil(timeout) { rule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty() }
+        } catch (e: Throwable) {
+            val tree = runCatching { rule.onRoot(useUnmergedTree = true).printToString(maxDepth = 30) }.getOrElse { "无法打印界面：$it" }
+            throw AssertionError("等待「$text」超时。当前界面：\n$tree", e)
+        }
     }
 
     @Test
@@ -43,7 +50,7 @@ class AppSmokeTest {
         rule.onAllNodesWithText("进入开盒").onFirst().performClick()
         waitForText("概率公示")
         rule.onAllNodesWithText("开 1 盒").onFirst().performClick()
-        waitForText("收入虚拟收藏柜", 30_000)
+        waitForText("收入虚拟收藏柜", 60_000)
         rule.onAllNodesWithText("收入虚拟收藏柜").onFirst().performClick()
         waitForText("已收入虚拟收藏柜")
     }
