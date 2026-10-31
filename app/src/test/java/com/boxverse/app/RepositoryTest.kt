@@ -26,7 +26,7 @@ import kotlin.random.Random
 
 /** 数据层集成测试：真实 Room 数据库（内存），验证收藏、交易、开盒与虚拟/实物隔离 */
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [34], application = android.app.Application::class)
+@Config(sdk = [35], application = android.app.Application::class)
 class RepositoryTest {
     private lateinit var db: BoxDatabase
     private lateinit var repo: BoxRepository

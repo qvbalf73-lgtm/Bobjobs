@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
 
 /** 冒烟测试：真正启动 App，访问五个主页面，并完成一次虚拟开盒 */
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [34], qualifiers = "w411dp-h891dp-xxhdpi")
+@Config(sdk = [35], qualifiers = "w411dp-h891dp-xxhdpi")
 class AppSmokeTest {
     @get:Rule
     val rule = createAndroidComposeRule<MainActivity>()
